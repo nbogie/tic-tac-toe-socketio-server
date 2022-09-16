@@ -1,12 +1,13 @@
 {
-  "name": "express-api-with-socket-io-server",
+  "name": "tic-tac-toe-socketio-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "watch": "nodemon index.js"
+    "test": "jest",
+    "start": "node dist/index.js",
+    "watch": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
