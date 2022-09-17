@@ -1,5 +1,5 @@
 import { collect } from "./collect";
-import { GameState } from "./types";
+import { GameState, PlayerId } from "./types";
 
 function makeInitialGameState(): GameState {
   return {
@@ -8,4 +8,8 @@ function makeInitialGameState(): GameState {
   };
 }
 
-export { makeInitialGameState };
+function nextPlayer(current: PlayerId): PlayerId {
+  return current === "p1" ? "p2" : "p1";
+}
+
+export { makeInitialGameState, nextPlayer };
