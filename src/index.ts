@@ -9,6 +9,7 @@ import { makeInitialGameState, setCellAt } from "./game";
 import { GameState, PlayerId } from "./types";
 //set up socket.io - boilerplate (same each time)
 import * as http from "http";
+import { collect, pick } from "./utils";
 
 const app = express();
 const server = http.createServer(app);
@@ -28,7 +29,6 @@ interface RoomsDict {
 }
 
 let rooms: RoomsDict = {};
-let nextRoomId = 1;
 
 app.use(cors());
 app.use(express.json());
@@ -40,11 +40,16 @@ io.on("connection", (s: Socket) => {
     s.emit("roomsList", rooms);
   });
 
+  function generateRandomRoomId() {
+    return collect(5, () =>
+      pick("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(""))
+    ).join("");
+  }
   s.on("createAndJoinRoom", () => {
     console.log("client creating and joining room");
-    nextRoomId++;
+    const roomId = generateRandomRoomId();
     const room: Room = {
-      id: "" + nextRoomId,
+      id: roomId,
       gameState: makeInitialGameState(),
       players: ["p1"],
     };

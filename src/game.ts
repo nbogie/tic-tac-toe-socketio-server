@@ -1,4 +1,4 @@
-import { collect } from "./collect";
+import { collect } from "./utils";
 import { GameState, PlayerId } from "./types";
 import { Cell } from "./types";
 
