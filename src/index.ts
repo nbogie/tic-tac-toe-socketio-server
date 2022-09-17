@@ -51,6 +51,7 @@ io.on("connection", (s: Socket) => {
     rooms[room.id] = room;
     s.emit("givePlayerId", "p1", room.id);
     s.join(room.id);
+    io.emit("roomsList", rooms);
     io.to(room.id).emit("update", room.gameState);
   });
 
@@ -65,20 +66,23 @@ io.on("connection", (s: Socket) => {
     } else {
       console.log("game full");
       s.emit("noSpaceInGame");
+      s.emit("roomsList", rooms);
     }
   });
 
   s.on(
     "cellClicked",
     (roomId: string, cellIndex: number, whoseTurn: string) => {
+      console.log("got socket msg: ", { roomId, cellIndex, whoseTurn });
       const room = rooms[roomId];
-      console.log("got socket msg: ", { cellIndex, whoseTurn });
+      if (!room) {
+        s.emit("error", "No such room.  Perhaps the server restarted?");
+        return;
+      }
       room.gameState = setCellAt(cellIndex, whoseTurn, room.gameState);
       io.to(room.id).emit("update", room.gameState);
     }
   );
-
-  // io.emit("update", gameState);
 });
 
 setInterval(() => {
