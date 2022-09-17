@@ -54,7 +54,7 @@ io.on("connection", (s: Socket) => {
   s.on("partial-input", (txt: string) =>
     console.log("got partial input: ", txt)
   );
-  setTimeout(() => io.emit("update", gameState), 1000);
+  io.emit("update", gameState);
 });
 
 setInterval(() => {
