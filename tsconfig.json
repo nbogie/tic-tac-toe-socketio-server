@@ -7,11 +7,18 @@
     "declarationMap": true, /* Create sourcemaps for d.ts files. */
     "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
     "module": "commonjs", /* Specify what module code is generated. */
+    "noImplicitReturns": true, /* Enable error reporting for codepaths that do not explicitly return in a function. */
+    "noUnusedLocals": true, /* Enable error reporting when local variables aren't read. */
     "outDir": "dist", /* Specify an output folder for all emitted files. */
-    "rootDir": "src", /* Specify the root folder within your source files. */
+    "rootDirs": [
+      "src"
+    ], /* Allow multiple folders to be treated as one when resolving modules. */
+    "skipLibCheck": true, /* Skip type checking all .d.ts files. */
     "sourceMap": true, /* Create source map files for emitted JavaScript files. */
     "strict": true, /* Enable all strict type-checking options. */
+    "stripInternal": true, /* Disable emitting declarations that have '@internal' in their JSDoc comments. */
     "target": "es2020", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "types": [], /* Specify type package names to be included without being referenced in a source file. */
     /* Completeness */
     /* Emit */
     /* Interop Constraints */
@@ -64,13 +71,11 @@
     // "noFallthroughCasesInSwitch": true,               /* Enable error reporting for fallthrough cases in switch statements. */
     // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     // "noImplicitOverride": true,                       /* Ensure overriding members in derived classes are marked with an override modifier. */
-    // "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return in a function. */
     // "noImplicitThis": true,                           /* Enable error reporting when 'this' is given the type 'any'. */
     // "noLib": true,                                    /* Disable including any library files, including the default lib.d.ts. */
     // "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type. */
     // "noResolve": true,                                /* Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project. */
     // "noUncheckedIndexedAccess": true,                 /* Add 'undefined' to a type when accessed using an index. */
-    // "noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
     // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
     // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
     // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
@@ -80,19 +85,19 @@
     // "reactNamespace": "",                             /* Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit. */
     // "removeComments": true,                           /* Disable emitting comments. */
     // "resolveJsonModule": true,                        /* Enable importing .json files. */
-    // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
-    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    // "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    // "rootDir": "src", /* Specify the root folder within your source files. */
+    //"skipDefaultLibCheck": true, /* Skip type checking .d.ts files that are included with TypeScript. */
     // "sourceRoot": "",                                 /* Specify the root path for debuggers to find the reference source code. */
     // "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
     // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
     // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
-    // "stripInternal": true,                            /* Disable emitting declarations that have '@internal' in their JSDoc comments. */
     // "tsBuildInfoFile": "./.tsbuildinfo",              /* Specify the path to .tsbuildinfo incremental compilation file. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
-    // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
     // "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
     // "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
-  }
+  },
+  "include": [
+    "src"
+  ],
 }
