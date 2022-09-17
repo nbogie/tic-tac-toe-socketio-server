@@ -2,12 +2,11 @@
 //e.g.
 // const socket = io.connect("https://SocketIOServerFinished.neillbogie.repl.co");
 
-import { Socket } from "socket.io";
-import { makeInitialGameState, nextPlayer } from "./game";
-import * as express from "express";
 import * as cors from "cors";
-import { Server } from "socket.io";
-import { Cell, GameState, PlayerId } from "./types";
+import * as express from "express";
+import { Server, Socket } from "socket.io";
+import { makeInitialGameState, setCellAt } from "./game";
+import { PlayerId } from "./types";
 
 const app = express();
 //set up socket.io - boilerplate (same each time)
@@ -68,32 +67,3 @@ const port = process.env.PORT || 4000;
 server.listen(port, () => {
   console.log("tictactoe server listening on *:" + port);
 });
-function setCellAt(
-  cellIndex: number,
-  whoPlayed: string,
-  gameState: GameState
-): GameState {
-  if (gameState.whoseTurn !== whoPlayed) {
-    return gameState;
-  }
-  const foundCell = gameState.cells.find((c) => c.index === cellIndex);
-
-  if (!foundCell) {
-    return gameState;
-  }
-  if (foundCell.status !== "empty") {
-    return gameState;
-  }
-  const newCell: Cell = {
-    ...foundCell,
-    status: whoPlayed === "p1" ? "X" : "O",
-  };
-  const retVal: GameState = {
-    ...gameState,
-    cells: gameState.cells.map((c) =>
-      c.index === newCell.index ? newCell : c
-    ),
-    whoseTurn: nextPlayer(gameState.whoseTurn),
-  };
-  return retVal;
-}
