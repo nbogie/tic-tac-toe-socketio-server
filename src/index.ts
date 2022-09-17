@@ -6,7 +6,7 @@ import * as cors from "cors";
 import * as express from "express";
 import { Server, Socket } from "socket.io";
 import { makeInitialGameState, setCellAt } from "./game";
-import { PlayerId } from "./types";
+import { GameState, PlayerId } from "./types";
 //set up socket.io - boilerplate (same each time)
 import * as http from "http";
 
@@ -18,42 +18,67 @@ const io = new Server(server, {
     origin: "*",
   },
 });
-let nextPlayerIdToGive: PlayerId | null = "p1";
-let gameState = makeInitialGameState();
+interface Room {
+  id: string;
+  players: PlayerId[];
+  gameState: GameState;
+}
+interface RoomsDict {
+  [roomId: string]: Room;
+}
+
+let rooms: RoomsDict = {};
+let nextRoomId = 1;
 
 app.use(cors());
 app.use(express.json());
 io.on("connection", (s: Socket) => {
   console.log("got connection.  registering handlers");
-  s.on("join", () => {
-    console.log("client joined");
-    if (nextPlayerIdToGive) {
-      console.log("assigning player id");
-      s.emit("givePlayerId", nextPlayerIdToGive);
-      nextPlayerIdToGive = nextPlayerIdToGive === "p1" ? "p2" : null;
+
+  s.on("listRooms", () => {
+    console.log("client requested rooms");
+    s.emit("roomsList", rooms);
+  });
+
+  s.on("createAndJoinRoom", () => {
+    console.log("client creating and joining room");
+    nextRoomId++;
+    const room: Room = {
+      id: "" + nextRoomId,
+      gameState: makeInitialGameState(),
+      players: ["p1"],
+    };
+    rooms[room.id] = room;
+    s.emit("givePlayerId", "p1", room.id);
+    s.join(room.id);
+    io.to(room.id).emit("update", room.gameState);
+  });
+
+  s.on("joinRoom", (roomId: string) => {
+    console.log("client tried to join room ", roomId);
+    const room = rooms[roomId];
+    if (room.players.length < 2) {
+      s.emit("givePlayerId", "p2", room.id);
+      s.join(room.id);
+      room.players.push("p2");
+      io.to(room.id).emit("update", room.gameState);
     } else {
       console.log("game full");
       s.emit("noSpaceInGame");
     }
   });
 
-  s.on("cellClicked", (cellIndex: number, whoseTurn: string) => {
-    console.log("got socket msg: ", { cellIndex, whoseTurn });
-    gameState = setCellAt(cellIndex, whoseTurn, gameState);
-    io.emit("update", gameState);
-  });
-
-  s.on("restartClicked", () => {
-    console.log("got restartClicked");
-    gameState = makeInitialGameState();
-    nextPlayerIdToGive = "p1";
-    io.emit("update", gameState);
-  });
-
-  s.on("partial-input", (txt: string) =>
-    console.log("got partial input: ", txt)
+  s.on(
+    "cellClicked",
+    (roomId: string, cellIndex: number, whoseTurn: string) => {
+      const room = rooms[roomId];
+      console.log("got socket msg: ", { cellIndex, whoseTurn });
+      room.gameState = setCellAt(cellIndex, whoseTurn, room.gameState);
+      io.to(room.id).emit("update", room.gameState);
+    }
   );
-  io.emit("update", gameState);
+
+  // io.emit("update", gameState);
 });
 
 setInterval(() => {
