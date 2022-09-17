@@ -7,10 +7,10 @@ import * as express from "express";
 import { Server, Socket } from "socket.io";
 import { makeInitialGameState, setCellAt } from "./game";
 import { PlayerId } from "./types";
+//set up socket.io - boilerplate (same each time)
+import * as http from "http";
 
 const app = express();
-//set up socket.io - boilerplate (same each time)
-const http = require("http");
 const server = http.createServer(app);
 
 const io = new Server(server, {
