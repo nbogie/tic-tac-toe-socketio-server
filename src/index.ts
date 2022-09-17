@@ -27,9 +27,14 @@ app.use(express.json());
 io.on("connection", (s: Socket) => {
   console.log("got connection.  registering handlers");
   s.on("join", () => {
+    console.log("client joined");
     if (nextPlayerIdToGive) {
+      console.log("assigning player id");
       s.emit("givePlayerId", nextPlayerIdToGive);
       nextPlayerIdToGive = nextPlayerIdToGive === "p1" ? "p2" : null;
+    } else {
+      console.log("game full");
+      s.emit("noSpaceInGame");
     }
   });
 
@@ -42,6 +47,7 @@ io.on("connection", (s: Socket) => {
   s.on("restartClicked", () => {
     console.log("got restartClicked");
     gameState = makeInitialGameState();
+    nextPlayerIdToGive = "p1";
     io.emit("update", gameState);
   });
 
