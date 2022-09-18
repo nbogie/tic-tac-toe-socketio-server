@@ -68,6 +68,7 @@ io.on("connection", (s: Socket) => {
             s.join(room.id);
             room.players.push("p2");
             io.to(room.id).emit("update", room.gameState);
+            io.emit("roomsList", rooms);
         } else {
             console.log("game full");
             s.emit("noSpaceInGame");
